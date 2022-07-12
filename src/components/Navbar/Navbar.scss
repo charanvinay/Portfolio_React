@@ -20,13 +20,21 @@
     justify-content: flex-start;
     align-items: center;
 
-    img {
-        width: 90px;
-        height: 20px;
+    p {
+        // width: 90px;
+        // height: 20px;
 
-        @media screen and (min-width: 2000px) {
-            width: 180px;
-            height: 40px;
+        
+        font-family: "logoFont";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 30px;
+        span{
+            color: var(--secondary-color);
+        }
+
+        @media screen and (max-width: 900px) {
+            font-size: 30px;
         }
     }
 }
@@ -105,6 +113,7 @@
         bottom: 0;
         right: 0;
         z-index: 5;
+        // transition: all 0.5s ease;
 
         padding: 1rem;
 

@@ -11,7 +11,10 @@ const Navbar = () => {
   return (
     <nav className="app__navbar">
       <div className="app__navbar-logo">
-        <img src={images.logo} alt="logo" />
+        <p className="p-text">
+          CHA<span>NAY</span>
+        </p>
+        {/* <img src={images.logo} alt="logo" /> */}
       </div>
       <ul className="app__navbar-links">
         {["home", "about", "work", "skills", "contact"].map((item) => (
@@ -27,8 +30,9 @@ const Navbar = () => {
 
         {toggle && (
           <motion.div
-            whileInView={{ x: [300, 0] }}
-            transition={{ duration: 0.85, ease: "easeOut" }}>
+            whileInView={{ x: [-5, 0] }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
             <HiX onClick={() => setToggle(false)} />
             <ul>
               {["home", "about", "work", "skills", "contact"].map((item) => (

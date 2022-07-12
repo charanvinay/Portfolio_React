@@ -18,3 +18,11 @@
     margin: 0;
     scroll-behavior: smooth;
 }
+
+@font-face {
+    font-family: logoFont;
+    /* src: url("./assets/KGSecondChancesSketch.ttf"); */
+    src: url("./assets/Pinstripe\ Limo.ttf");
+     /* src: url("./assets/NightAtTheOperaNF.ttf"); */
+    /* src: url("./assets/Monoton-Regular.ttf");  */
+}
