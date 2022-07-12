@@ -1,17 +1,40 @@
 import React from "react";
-import { BsTwitter, BsInstagram } from "react-icons/bs";
-import { FaFacebookF } from "react-icons/fa";
+import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { FaHackerrank } from "react-icons/fa";
+import { SiHackerearth } from "react-icons/si";
 const SocialMedia = () => {
   return (
     <div className="app__social">
       <div>
-        <BsTwitter />
+        <BsGithub
+          onClick={() =>
+            window.open("https://github.com/charanvinay", "_blank")
+          }
+        />
       </div>
       <div>
-        <FaFacebookF />
+        <BsLinkedin
+          onClick={() =>
+            window.open(
+              "https://www.linkedin.com/in/charan-vinay-narni-8681931b6/",
+              "_blank"
+            )
+          }
+        />
       </div>
       <div>
-        <BsInstagram />
+        <FaHackerrank
+          onClick={() =>
+            window.open("https://www.hackerrank.com/s160097", "_blank")
+          }
+        />
+      </div>
+      <div>
+        <SiHackerearth
+          onClick={() =>
+            window.open("https://www.hackerearth.com/@s160097", "_blank")
+          }
+        />
       </div>
     </div>
   );

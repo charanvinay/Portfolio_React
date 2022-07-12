@@ -36,19 +36,17 @@ const Work = () => {
         My Creative <span>Portfolio</span> section
       </h2>
       <div className="app__work-filter">
-        {["All", "UI/UX", "Web App", "Mobile App", "React JS"].map(
-          (item, index) => (
-            <div
-              key={index}
-              onClick={() => handleWorkFilter(item)}
-              className={`app__work-filter-item app__flex p-text ${
-                activeFilter === item ? "item-active" : ""
-              }`}
-            >
-              {item}
-            </div>
-          )
-        )}
+        {["All", "Web App", "Mobile App"].map((item, index) => (
+          <div
+            key={index}
+            onClick={() => handleWorkFilter(item)}
+            className={`app__work-filter-item app__flex p-text ${
+              activeFilter === item ? "item-active" : ""
+            }`}
+          >
+            {item}
+          </div>
+        ))}
       </div>
       <motion.div
         animate={animateCard}
@@ -94,15 +92,15 @@ const Work = () => {
                 </a>
               </motion.div>
             </div>
-            <div className="app__work-content app__flex">
+            {/* <div className="app__work-content app__flex">
               <h4 className="bold-text">{work.title}</h4>
-              <p className="p-text" style={{ marginTop: 10 }}>
+              <p className="p-text text-center" style={{ marginTop: 10 }}>
                 {work.description}
-              </p>
-              <div className="app__work-tag app__flex">
+              </p> 
+               <div className="app__work-tag app__flex">
                 <p className="p-text">{work.tags[0]}</p>
-              </div>
-            </div>
+              </div> 
+            </div> */}
           </div>
         ))}
       </motion.div>

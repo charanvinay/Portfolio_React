@@ -24,7 +24,7 @@ const Skills = () => {
   return (
     <>
       <h2 className="head-text">Skills & Experience</h2>
-      <div className="app__skills-container">
+      <div className="app__skills-container app__flex">
         <motion.div className="app__skills-list">
           {skills?.map((skill) => (
             <motion.div
