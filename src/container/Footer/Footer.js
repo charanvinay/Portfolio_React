@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { client } from "../../client";
 import { images } from "../../constants";
 import { AppWrap, MotionWrap } from "../../Wrapper";
+import { ToastContainer, toast } from "react-toastify";
 import "./Footer.scss";
 const Footer = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +10,6 @@ const Footer = () => {
     email: "",
     message: "",
   });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { name, email, message } = formData;
 
@@ -19,19 +18,51 @@ const Footer = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
-    setIsLoading(true);
-    const contact = {
-      _type: "contact",
-      name: name,
-      email: email,
-      message: message,
-    };
-
-    client.create(contact).then(() => {
-      setIsLoading(false);
-      setIsFormSubmitted(true);
+  const errorToast = (error) => {
+    return toast.error(error, {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
+  };
+
+  const handleSubmit = () => {
+    let regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    console.log(regex.test(formData.email));
+    if (formData.name === "") {
+      errorToast("Oops! You missed your name😅");
+    } else if (formData.email === "") {
+      errorToast("Oops! You missed your email😅");
+    } else if (!regex.test(formData.email)) {
+      errorToast("Fill in a valid email address🙂");
+    } else if (formData.message === "") {
+      errorToast("Oops! You missed the message itself😅");
+    } else {
+      const contact = {
+        _type: "contact",
+        name: name,
+        email: email,
+        message: message,
+      };
+      toast.promise(
+        client.create(contact).then(() => {
+          setFormData({
+            name: "",
+            email: "",
+            message: "",
+          });
+        }),
+        {
+          pending: "Sending your message...",
+          success: "Thank you for getting in touch!😊",
+          error: "Something went wrong 😯",
+        }
+      );
+    }
   };
 
   return (
@@ -51,46 +82,54 @@ const Footer = () => {
           </a>
         </div>
       </div>
-      {!isFormSubmitted ? (
-        <div className="app__footer-form app__flex">
-          <div className="app__flex">
-            <input
-              className="p-text"
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={name}
-              onChange={handleChangeInput}
-            />
-          </div>
-          <div className="app__flex">
-            <input
-              className="p-text"
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={email}
-              onChange={handleChangeInput}
-            />
-          </div>
-          <div>
-            <textarea
-              className="p-text"
-              placeholder="Your Message"
-              value={message}
-              name="message"
-              onChange={handleChangeInput}
-            />
-          </div>
-          <button className="p-text" type="button" onClick={handleSubmit}>
-            {isLoading ? "Sending" : "Send Message"}
-          </button>
+
+      <div className="app__footer-form app__flex">
+        <div className="app__flex">
+          <input
+            className="p-text"
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={name}
+            onChange={handleChangeInput}
+          />
         </div>
-      ) : (
+        <div className="app__flex">
+          <input
+            className="p-text"
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={email}
+            onChange={handleChangeInput}
+          />
+        </div>
         <div>
-          <h3 className="head-text">Thank you for getting in touch!</h3>
+          <textarea
+            className="p-text"
+            placeholder="Your Message"
+            value={message}
+            name="message"
+            onChange={handleChangeInput}
+          />
         </div>
-      )}
+        <button className="p-text" type="button" onClick={handleSubmit}>
+          Send a message
+        </button>
+      </div>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        theme="colored"
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

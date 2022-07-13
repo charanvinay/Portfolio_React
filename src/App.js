@@ -2,6 +2,7 @@ import React from "react";
 import { About, Footer, Header, Skills, Work } from "./container";
 import { Navbar } from "./components";
 import "./App.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
