@@ -1,32 +1,47 @@
-import React, { useEffect, useState } from "react";
-import "./Work.scss";
-import { AiFillEye, AiFillGithub } from "react-icons/ai";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AiFillEye } from "react-icons/ai";
+import { FaLink } from "react-icons/fa";
 import { AppWrap, MotionWrap } from "../../Wrapper";
-import { urlFor, client } from "../../client";
+import { Utils } from "../../utils";
+import "./Work.scss";
 const Work = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("all")
   const [animateCard, setAnimateCard] = useState({ y: 0, opacity: 1 });
   const [works, setWorks] = useState([]);
-  const [filteredWorks, setFilteredWorks] = useState([]);
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    const query = '*[_type == "works"]';
-    client.fetch(query).then((data) => {
-      setWorks(data);
-      setFilteredWorks(data);
-    });
+    fetchOptions();
+    fetchData({});
   }, []);
+
+  const fetchData = async ({ activeFilter = "" }) => {
+    try {
+      const res = await Utils.makeApiCall({ endPoint: `/works?tag=${activeFilter}` });
+      if (res?.status) {
+        setWorks([...res?.data]);
+      }
+    } catch (error) {}
+  };
+  const fetchOptions = async () => {
+    try {
+      const ops = await Utils.makeApiCall({ endPoint: "/works/tags" });
+      if (ops?.status) {
+        setOptions([{ label: "All", value: "all" }, ...ops?.data]);
+      }
+    } catch (error) {}
+  };
 
   const handleWorkFilter = (item) => {
     setActiveFilter(item);
     setAnimateCard([{ y: 100, opacity: 0 }]);
     setTimeout(() => {
       setAnimateCard([{ y: 0, opacity: 1 }]);
-      if (item === "All") {
-        setFilteredWorks(works);
+      if (item === "all") {
+        fetchData({ activeFilter: "" });
       } else {
-        setFilteredWorks(works.filter((work) => work.tags.includes(item)));
+        fetchData({ activeFilter: item });
       }
     }, 500);
   };
@@ -36,15 +51,15 @@ const Work = () => {
         My Creative <span>Portfolio</span> section
       </h2>
       <div className="app__work-filter">
-        {["All", "Web App", "Mobile App", "UI Design"].map((item, index) => (
+        {options.map((item, index) => (
           <div
             key={index}
-            onClick={() => handleWorkFilter(item)}
+            onClick={() => handleWorkFilter(item.value)}
             className={`app__work-filter-item app__flex p-text ${
-              activeFilter === item ? "item-active" : ""
+              activeFilter === item.value ? "item-active" : ""
             }`}
           >
-            {item}
+            {item.label}
           </div>
         ))}
       </div>
@@ -53,10 +68,10 @@ const Work = () => {
         transition={{ duration: 0.5, delayChildren: 0.5 }}
         className="app__work-portfolio"
       >
-        {filteredWorks.map((work, index) => (
+        {works.map((work, index) => (
           <div className="app__work-item app__flex" key={index}>
             <div className="app__work-img app__flex">
-              <img src={urlFor(work.imgUrl)} alt={work.name} />
+              <img src={Utils.urlFor(work.imgUrl)} alt={work.name} />
               <motion.div
                 whileHover={{ opacity: [0, 1] }}
                 transition={{
@@ -78,7 +93,7 @@ const Work = () => {
                     <AiFillEye />
                   </motion.div>
                 </a>
-                <a href={work.codeLink} target="_blank" rel="noreferrer">
+                {work?.codeLink && <a href={work.codeLink} target="_blank" rel="noreferrer">
                   <motion.div
                     whileInView={{ scale: [0, 1] }}
                     whileHover={{ scale: [1, 0.9] }}
@@ -87,9 +102,9 @@ const Work = () => {
                     }}
                     className="app__flex"
                   >
-                    <AiFillGithub />
+                    <FaLink />
                   </motion.div>
-                </a>
+                </a>}
               </motion.div>
             </div>
             {/* <div className="app__work-content app__flex">
